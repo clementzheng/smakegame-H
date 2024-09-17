@@ -14,12 +14,12 @@ let ctx;
 let bg;
 let paperTex;
 
-let renderSide = false;
+let renderSide = true;
 let imgBody, imgHead, imgEat, imgFood;
 
-let scaleBody = 0.35;
-let scaleHead = 0.30;
-let scaleFood = 0.33;
+let scaleBody = 0.5;
+let scaleHead = 0.55;
+let scaleFood = 0.4;
 
 function preload() {
   paperTex = loadImage("img/paper.jpg");
@@ -42,6 +42,10 @@ function setup() {
   document.querySelector("body").addEventListener("keydown", (e) => {
     console.log(e);
     keyReceived(e.key);
+  });
+
+  document.querySelector("body").addEventListener("click", (e) => {
+    clickReceived(e);
   });
 
   drawBG();
@@ -139,6 +143,29 @@ function resetGame() {
   apples.forEach((a) => {
     a.randomPosition([snake], w, h);
   });
+}
+
+function clickReceived(e) {
+  const cx = e.clientX / window.innerWidth - 0.5;
+  const cy = e.clientY / window.innerHeight - 0.5;
+  const angle = Math.floor(((Math.atan2(cy, cx) / Math.PI * 180 + 225) % 360) / 90);
+  if (!snake.play) {
+    snake.restart();
+  }
+  switch (angle) {
+    case 0:
+      snake.updateDir(2, rush);
+      break;
+    case 1:
+      snake.updateDir(3, rush);
+      break;
+    case 2:
+      snake.updateDir(0, rush);
+      break;
+    case 3:
+      snake.updateDir(1, rush);
+      break;
+  }
 }
 
 function keyReceived(keyIs) {
